@@ -1,5 +1,7 @@
 from django.shortcuts import render
 
+from app.models import Especie
+
 # Create your views here.
 def index(request):
     return render(request,"index.html")
@@ -16,4 +18,6 @@ def login(request):
 def contacto(request):
     return render(request,"contacto.html")
 def añadirmascota(request):
-    return render(request, "mascota.html")
+    especie = Especie.objects.all()
+    return render(request, "mascota.html", {"especie": especie})
+
