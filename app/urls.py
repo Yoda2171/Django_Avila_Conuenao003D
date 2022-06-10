@@ -11,5 +11,6 @@ urlpatterns = [
     path('register/', views.register,name="register"),
     path('login/', views.login,name="login"),
     path('contacto/', views.contacto,name="contacto"),
-    path('mascota/',views.añadirmascota,name="mascota"),
+    path('mascota/',views.mascotas,name="mascota"),
+    path('mascota/new/',views.añadirMascota,name="añadirMascota"),
 ]

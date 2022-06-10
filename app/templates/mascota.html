@@ -44,18 +44,19 @@
     <div class="container">
         <div class="card m-3">
             <div class="card-body">
-                <form class="needs-validation" novalidate>
+                <form class="needs-validation"  action={% url 'añadirMascota' %} method='POST' novalidate>
+                    {% csrf_token %}
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
-                            <label for="validationTooltip01">Nombre del dueño</label>
-                            <input type="text" class="form-control" id="validationTooltip01"  required>
+                            <label for="validationTooltip01">Nombre del Exdueño</label>
+                            <input type="text" name="nombre_Dueño" class="form-control" id="validationTooltip01"  required>
                             <div class="valid-tooltip">
                                 Looks good!
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="validationTooltip02">Nombre de la mascota</label>
-                            <input type="text" class="form-control" id="validationTooltip02"  required>
+                            <input type="text" name="nombre_Mascota" class="form-control" id="validationTooltip02"  required>
                             <div class="valid-tooltip">
                                 Looks good!
                             </div>
@@ -64,14 +65,14 @@
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label for="validationTooltip03">Raza</label>
-                            <input type="text" class="form-control" id="validationTooltip03" required>
+                            <input type="text" name="raza_Mascota" class="form-control" id="validationTooltip03" required>
                             <div class="invalid-tooltip">
                                 Please provide a valid city.
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="validationTooltip04">Especie</label>
-                            <select class="custom-select" id="validationTooltip04" required>
+                            <select name ="nombre_Especie"class="custom-select" id="nombre_Especie" required>
                                 <option selected disabled value="">Choose...</option>
                                 {% for i in especie %}
                                     <option>{{i.nombreEspecie}}</option>        
@@ -85,7 +86,7 @@
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="validationTooltip05">Edad</label>
-                            <input type="number" class="form-control" id="validationTooltip05" required>
+                            <input name ="edad_mascota" type="number" class="form-control" id="validationTooltip05" required>
                             <div class="invalid-tooltip">
                                 Please provide a valid zip.
                             </div>

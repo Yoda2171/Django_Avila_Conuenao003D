@@ -6,7 +6,7 @@ from django.db import models
 
 class Especie(models.Model):
     id = models.BigAutoField(primary_key=True,verbose_name="Id especie")
-    nombreEspecie = models.CharField(max_length=69,null=False, verbose_name="nombre de la especie")
+    nombreEspecie = models.CharField(max_length=69, verbose_name="nombre de la especie")
 
     def __str__(self):
         return self.nombreEspecie
