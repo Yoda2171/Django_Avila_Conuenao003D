@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    
+    {% load static %}
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+        integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/08c92dc578.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <title>Petes.com</title>
+</head>
+
+<body>
+    
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="index.html"><i class="fas fa-paw p-2"></i>Petes</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link active" href={% url "index" %}>Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href={% url "somos" %}>Somos</a>
+                <a class="nav-link" href={% url "galeria" %}>Galeria</a>
+                <a class="nav-link" href={% url "clientes" %}>Clientes</a>
+            </div>
+            <div class="navbar-nav ml-auto">
+                <a class="nav-link" href={% url "register" %}>Register</a>
+                <a class="nav-link" href={% url "login" %}>Login</a>
+
+            </div>
+        </div>
+
+    </nav>
+
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        </ol>
+        {% load static %}
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="{% static 'images/conjunto-perros-1000x700.jpg'%}" class="d-block  w-100 ">
+            </div>
+            <div class="carousel-item">
+                <img src="{% static 'images/gato 5.jpg'%}" class="d-block  w-100 ">
+            </div>
+            <div class="carousel-item">
+                <img src="{%static 'images/perro3.jpg'%}" class="d-block w-100 ">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-target="#carouselExampleIndicators" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-target="#carouselExampleIndicators" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </button>
+    </div>
+
+
+
+
+
+    <!-- heading1 -->
+    <section id="scroll">
+        <div class="container-fluid px-5">
+            <div class="row gx-5 align-items-center">
+                <div class="col-lg-6 order-lg-2">
+                    <div class="p-5"><img class="img-fluid rounded-circle" src="{% static 'images/perro 2.jpg' %}" alt="..." /></div>
+                </div>
+                <div class="col-lg-6 order-lg-1">
+                    <div class="p-5">
+                        <h2 class="display-4">¿Quieres adoptar un pug?</h2>
+                        <p>Se dice que el pug se remonta a unos 2000 años cuando los emperadores de China desarrollaron
+                            estas mascotas refinadas. Al igual que muchas razas del Extremo Oriente, los pugs eran un
+                            tesoro que los extranjeros solo adquirían raramente como regalo. La raza se extendió en los
+                            años 1500 cuando los comerciantes holandeses llevaron los primeros ejemplares a Europa </p>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </section>   
+    <!-- heading1 -->
+
+    <!-- heading2 -->
+    <section>
+        <div class="container-fluid px-5">
+            <div class="row gx-5 align-items-center">
+                <div class="col-lg-6">
+                    <div class="p-5"><img class="img-fluid rounded-circle" src="{% static 'images/gato 2.png'%}" alt="..." /></div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="p-5">
+                        <h2 class="display-4">¿Que son Los gatos bobtails?</h2>
+                        <p>El American Bobtail es un gato abundante y de cola corta. Su cuerpo es moderadamente largo,
+                            con huesos sustanciales y fornido. La postura es notablemente rectangular. El torso es lleno
+                            y ancho. Las caderas son sólidas, casi tan anchas como el pecho, y las patas traseras son
+                            más largas que las patas delanteras con pies grandes y redondos que pueden tener mechones en
+                            los dedos. La cabeza es una cuña ancha sin planos planos, de tamaño proporcional al cuerpo.
+                            Hay una curva cóncava desde la nariz hasta las cejas, o una elevación hacia las cejas
+                            prominentes, un hocico ancho y sin pellizcos, almohadillas de bigotes prominentes, una nariz
+                            ancha suavemente inclinada y mandíbulas fuertes y llenas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- heading2 -->
+
+
+    <footer class="footer-07">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12 text-center">
+                    <h2 class="footer-heading"><a href="#" class="logo">Petes.com</a></h2>
+                    <p class="menu">
+                        <a href={% url "index" %}>Home</a>
+                        <a href={% url "somos" %}>Somos</a>
+                        <a href={% url "galeria" %}>Galeria</a>
+                    </p>
+                    <ul class="ftco-footer-social p-0">
+                        <li class="ftco-animate"><a href="#" data-toggle="tooltip" data-placement="top"
+                                title="Twitter"><span class="ion-logo-twitter"></span></a></li>
+                        <li class="ftco-animate"><a href="#" data-toggle="tooltip" data-placement="top"
+                                title="Facebook"><span class="ion-logo-facebook"></span></a></li>
+                        <li class="ftco-animate"><a href="#" data-toggle="tooltip" data-placement="top"
+                                title="Instagram"><span class="ion-logo-instagram"></span></a></li>
+                    </ul>
+                </div>
+                <div class="contacto">
+                <a href={% url "contacto" %}>Contacto</a>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-12 text-center">
+                    <p class="copyright">Pablo Avila Angel Coñuenao Copyright &copy; All rights reserved</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>
