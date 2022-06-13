@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+        integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/08c92dc578.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <title>Petes.com</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href={% url "index" %}><i class="fas fa-paw p-2"></i>Petes</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link " href={% url "index" %}>Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href={% url "somos" %}>Somos</a>
+                <a class="nav-link" href={% url "galeria" %}>Galeria</a>
+                <a class="nav-link" href={% url "clientes" %}>Clientes</a>
+            </div>
+            <div class="navbar-nav ml-auto">
+                <a class="nav-link " href={% url "register" %}>Register</a>
+                <a class="nav-link active" href={% url "login" %}>Login</a>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container">
+        <div class="card m-5 p-2">
+            <div class="card-body">
+                <form class="needs-validation" action={% url 'editarMascota' mascota.id  %}
+                    method='POST' enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="validationTooltip01">Nombre del Exdueño</label>
+                            <input type="text" name="nombre_Dueño" class="form-control" id="validationTooltip01"
+                                value="{{mascota.nombreDueño}}" required>
+                            <div class="valid-tooltip">
+                                Looks good!
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="validationTooltip02">Nombre de la mascota</label>
+                            <input type="text" name="nombre_Mascota" class="form-control" id="validationTooltip02"
+                                value="{{mascota.nombreMascota}}" required>
+                            <div class="valid-tooltip">
+                                Looks good!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="validationTooltip03">Raza</label>
+                            <input type="text" name="raza_Mascota" class="form-control" id="validationTooltip03"
+                                value="{{mascota.nombreMascota}}" required>
+                            <div class="invalid-tooltip">
+                                Please provide a valid city.
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="validationTooltip04">Especie</label>
+                            <select name="nombre_Especie" class="custom-select" id="nombre_Especie" required>
+                                <option selected disabled value="">{{mascota.nombreEspecie}}</option>
+                                {% for i in especies %}
+                                <option>{{i.nombreEspecie}}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-tooltip">
+                                Please select a valid state.
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="validationTooltip05">Edad</label>
+                            <input name="edad_mascota" type="number" class="form-control" id="validationTooltip05"
+                                value={{mascota.edad}} required>
+                            <div class="invalid-tooltip">
+                                Please provide a valid zip.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div>
+                            <img src="{{mascota.imagenMascota.url}}" class="img-fluid" style="width: 20%;">
+                        </div>
+                        <label for="imagen_mascota">Inserte imagen de la mascota</label>
+                        <input name="imagen_mascota" type="file" class="form-control-file" id="imagen_mascota">
+
+                    </div>
+
+                    <button class="btn btn-primary" type="submit">Submit form</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <footer class="footer-07">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12 text-center">
+                    <h2 class="footer-heading"><a href="#" class="logo">Petes.com</a></h2>
+                    <p class="menu">
+                        <a href={% url "index" %}>Home</a>
+                        <a href={% url "somos" %}>Somos</a>
+                        <a href={% url "galeria" %}>Galeria</a>
+                    </p>
+                    <ul class="ftco-footer-social p-0">
+                        <li class="ftco-animate"><a href="#" data-toggle="tooltip" data-placement="top"
+                                title="Twitter"><span class="ion-logo-twitter"></span></a></li>
+                        <li class="ftco-animate"><a href="#" data-toggle="tooltip" data-placement="top"
+                                title="Facebook"><span class="ion-logo-facebook"></span></a></li>
+                        <li class="ftco-animate"><a href="#" data-toggle="tooltip" data-placement="top"
+                                title="Instagram"><span class="ion-logo-instagram"></span></a></li>
+                    </ul>
+
+                </div>
+                <div class="contacto">
+                    <a href={% url "contacto" %}>Contacto</a>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-12 text-center">
+                    <p class="copyright">Pablo Avila Angel Coñuenao Copyright &copy; All rights reserved</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>
