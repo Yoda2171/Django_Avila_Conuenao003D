@@ -46,17 +46,16 @@
 
     {% load crispy_forms_tags %}
     <div class="container">
-        <br>
-         <div class="row">
+
+        <div class="row">
             <div class="col-md-12 col-6 md-3">
-                <div class="card">
+                <div class="card m-5">
                     <div class="card-body">
                         <h2>Ingrese sus datos</h2>
-                        <hr>
                         <form action="#" method="POST">
-                               {% csrf_token %}
+                            {% csrf_token %}
 
-                               {{form | crispy }}
+                            {{form | crispy }}
 
                             <a class="btn btn-secondary btn-lg " href={% url "index" %}>Volver al home</a>
                             <input type="submit" value="Ingresar" class="btn btn-primary btn-lg " style="float:right;">
@@ -67,10 +66,10 @@
 
                     </div>
                 </div>
-            </div>      
-         </div>
+            </div>
+        </div>
     </div>
- 
+
 
 
 
