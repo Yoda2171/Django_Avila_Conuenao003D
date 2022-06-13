@@ -35,9 +35,11 @@ def añadirMascota(request):
     mascota.raza=request.POST["raza_Mascota"]
     mascota.edad=request.POST["edad_mascota"]
     mascota.nombreDueño=request.POST["nombre_Dueño"]
+    mascota.imagenMascota=request.POST["imagen_mascota"]
 
     mascota.save()
    
  
     return redirect('galeria')
+
 

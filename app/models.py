@@ -20,6 +20,7 @@ class Mascota(models.Model):
     raza = models.CharField(max_length=50,verbose_name="Raza")
     edad= models.IntegerField(verbose_name="edad")  
     nombreDueño = models.CharField(max_length=50,verbose_name="Nombre del dueño")
+    imagenMascota= models.ImageField(upload_to = "img/",verbose_name="imagen de la mascota")
 
     def __str__(self):
         return self.nombreMascota
