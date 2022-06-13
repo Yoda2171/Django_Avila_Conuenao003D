@@ -20,7 +20,7 @@ def filepath(request, filename):
     old_filename = filename
     timeNow = datetime.datetime.now().strftime('%Y%m%d%H:%M:%S')
     filename = "%s%s" % (timeNow, old_filename)
-    return os.path.join('images/', filename)
+    return os.path.join('images/', filename) 
 
 class Mascota(models.Model):
     id = models.BigAutoField(primary_key=True,verbose_name="Id mascota")
