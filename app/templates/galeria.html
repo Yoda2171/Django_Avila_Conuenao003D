@@ -9,11 +9,12 @@
 
 
     <!-- Bootstrap CSS -->
+    <script src="https://kit.fontawesome.com/08c92dc578.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
         integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://kit.fontawesome.com/08c92dc578.js" crossorigin="anonymous"></script>
+    
     <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
@@ -22,7 +23,7 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href={% url 'index'%}><i class="fas fa-paw p-2"></i>Petes</a>
+        <a class="navbar-brand" href={% url 'index' %}><i class="fas fa-paw p-2"></i>Petes</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -48,7 +49,11 @@
             <p class="lead">Actualmente tenemos en adopción a muchas mascotas. Todas son tranquilas y muy obedientes,
                 esperando a que
                 su próximo amo les dé mucho amor y cariño</p>
-                <a href={% url "mascota" %}><button type="button" class="btn btn-info btn-lg btn-block">Añadir Mascota</button></a>
+            {% if user.is_authenticated %}
+            <a href={% url "mascota" %}><button type="button" class="btn btn-info btn-lg btn-block">Añadir
+                    Mascota</button></a>
+            {% endif %}
+
         </div>
     </div>
 
@@ -57,26 +62,72 @@
 
     <div class="container-fluid">
         {% load static %}
+        <!-- {% if user.is_authenticated %} -->
+        <div class="container">
+            <div class="table-responsive-sm">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Foto</th>
+                            <th scope="col">Especie</th>
+                            <th scope="col">Exdueño</th>
+                            <th scope="col">Editar</th>
+                            <th scope="col">Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%for i in mascotas%}
+                        <tr>
+                            <td>{{i.nombreMascota}}</td>
+                            <td><img src="{{i.imagenMascota.url}}" class="img-fluid" style="width: 25%;"></td>
+                            <td>{{i.nombreEspecie}}</td>
+                            <td>{{i.nombreDueño}}</td>
+                            <td><a href={% url "editarMascota" i.id  %}>Editar</a></td>
+                            <td>
+                                <form action={% url "eliminarMascota" i.id %} method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                                </form>
+                            </td>
+
+                        </tr>
+                        {%endfor%}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+        <!--     {% endif %} -->
 
         <!-- Galeria -->
         <div class="row">
 
             <div class="col-4">
-                <img src="{% static 'images/conejo 1.jpg' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+                <img src="{% static 'images/conejo 1.jpg' %}"
+                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
             </div>
             <div class="col-4">
-                <img src="{% static 'images/conejo 2.jpg' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+                <img src="{% static 'images/conejo 2.jpg' %}"
+                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
             </div>
             <div class="col-4">
-                <img src="{% static 'images/conejo 3.jpg' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+                <img src="{% static 'images/conejo 3.jpg' %}"
+                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
             </div>
         </div>
         <div class="row">
             <div class="col-4">
-                <img src="{% static 'images/perro 2.jpg' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+                <img src="{% static 'images/perro 2.jpg' %}"
+                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
             </div>
             <div class="col-4">
-                <img src="{% static 'images/perro3.jpg' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+                <img src="{% static 'images/perro3.jpg' %}"
+                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
             </div>
             <div class="col-4">
                 <img src="{% static 'images/conjunto-perros-1000x700.jpg' %}"
@@ -85,13 +136,16 @@
         </div>
         <div class="row">
             <div class="col-4">
-                <img src="{% static 'images/gato 2.png' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+                <img src="{% static 'images/gato 2.png' %}"
+                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
             </div>
             <div class="col-4">
-                <img src="{% static 'images/gato 5.jpg' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+                <img src="{% static 'images/gato 5.jpg' %}"
+                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
             </div>
             <div class="col-4">
-                <img src="{% static 'images/gato 4.jpg' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+                <img src="{% static 'images/gato 4.jpg' %}"
+                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
             </div>
         </div>
 
@@ -104,7 +158,10 @@
             <p class="lead">Actualmente tenemos en adopción a muchas mascotas. Todas son tranquilas y muy obedientes,
                 esperando a que
                 su próximo amo les dé mucho amor y cariño</p>
-                <a href={% url "mascota" %}><button type="button"  class="btn btn-info btn-lg btn-block">Añadir Mascota</button></a>
+            {% if user.is_authenticated %}
+            <a href={% url "mascota" %}><button type="button" class="btn btn-info btn-lg btn-block">Añadir
+                    Mascota</button></a>
+            {% endif %}
         </div>
     </div>
 
@@ -148,10 +205,7 @@
     </footer>
 
 
-    <script src="js/jquery.min.js"></script>
-    <script src="js/popper.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/main.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>

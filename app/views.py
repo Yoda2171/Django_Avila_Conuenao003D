@@ -1,6 +1,8 @@
+
 from django.shortcuts import redirect, render
 
 from app.models import Especie, Mascota
+
 
 # Create your views here.
 def index(request):
@@ -10,7 +12,8 @@ def somos(request):
     return render(request,"somos.html")
 
 def galeria(request):
-    return render(request,"galeria.html")
+    mascotas = Mascota.objects.all()
+    return render(request,"galeria.html", {"mascotas": mascotas})
 
 def clientes(request):
     return render(request,"clientes.html")
@@ -29,17 +32,51 @@ def mascotas(request):
     return render(request, "mascota.html", {"especie": especie})
 
 def añadirMascota(request):
-    mascota= Mascota()
-    mascota.nombreMascota=request.POST["nombre_Mascota"]
-    mascota.nombreEspecie=Especie.objects.get(nombreEspecie=request.POST["nombre_Especie"])
-    mascota.raza=request.POST["raza_Mascota"]
-    mascota.edad=request.POST["edad_mascota"]
-    mascota.nombreDueño=request.POST["nombre_Dueño"]
-    mascota.imagenMascota=request.POST["imagen_mascota"]
+    
+    if request.method == 'POST':
 
-    mascota.save()
-   
- 
+        mascota= Mascota()
+        mascota.nombreMascota=request.POST.get("nombre_Mascota")
+        mascota.nombreEspecie=Especie.objects.get(nombreEspecie=request.POST.get("nombre_Especie") )
+        mascota.raza=request.POST.get("raza_Mascota")
+        mascota.edad=request.POST.get("edad_mascota")
+        mascota.nombreDueño=request.POST.get("nombre_Dueño")
+
+        if len(request.FILES)!=0:
+
+         mascota.imagenMascota=request.FILES["imagen_mascota"]
+
+        mascota.save()
+        return redirect('galeria')
+
+
+def eliminarMascota(request,id):
+    mascota= Mascota.objects.get(id=id)
+    mascota.delete()
     return redirect('galeria')
 
+def editarMascota(request,id):
+    data = {
+       
+        "especies" : Especie.objects.all(),
+        "mascota": Mascota.objects.get(id=id),
+    }
+    
+    if request.method == 'POST':
+        mascota= Mascota.objects.get(id=id)
+        mascota.nombreMascota=request.POST.get("nombre_Mascota")
+
+        if mascota.nombreEspecie != mascota.nombreEspecie :
+            mascota.nombreEspecie=Especie.objects.get(nombreEspecie=request.POST.get("nombre_Especie") )
+      
+        mascota.raza=request.POST.get("raza_Mascota")
+        mascota.edad=request.POST.get("edad_mascota")
+        mascota.nombreDueño=request.POST.get("nombre_Dueño")
+
+        if len(request.FILES)!=0:
+            mascota.imagenMascota=request.FILES["imagen_mascota"]
+        mascota.save()
+        return redirect('galeria')
+       
+    return render(request,"editMascota.html",data)
 

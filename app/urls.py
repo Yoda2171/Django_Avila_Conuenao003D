@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path
-from django.views import View
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
@@ -13,4 +14,6 @@ urlpatterns = [
     path('contacto/', views.contacto,name="contacto"),
     path('mascota/',views.mascotas,name="mascota"),
     path('mascota/new/',views.añadirMascota,name="añadirMascota"),
-]
+    path('galeria/<id>/',views.eliminarMascota,name="eliminarMascota"),
+    path('mascota/<id>/',views.editarMascota,name="editarMascota"),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
