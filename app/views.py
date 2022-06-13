@@ -12,4 +12,4 @@ def clientes(request):
 def register(request):
     return render(request,"register.html")
 def contacto(request):
-    return render(request,"contacto.html")
+    return render(request,"contacto.html") 
