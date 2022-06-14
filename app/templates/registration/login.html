@@ -15,13 +15,16 @@
     <script src="https://kit.fontawesome.com/08c92dc578.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.js"></script>
 
     <title>Petes.com</title>
 </head>
 
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href={% url "index" %}><i class="fas fa-paw p-2"></i>Petes</a>
+        <a class="navbar-brand" href="index.html"><i class="fas fa-paw p-2"></i>Petes</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -34,16 +37,43 @@
                 <a class="nav-link" href={% url "clientes" %}>Clientes</a>
             </div>
             <div class="navbar-nav ml-auto">
-                <a class="nav-link " href={% url "register" %}>Register</a>
-                <a class="nav-link active" href={% url "login" %}>Login</a>
+            {% if user.is_authenticated %}
+                <a class="nav-link" href={% url "register" %}>Register</a>
+                <a class="nav-link" href={% url "logout" %}>Logout</a>
+            {%else%}
+                <a class="nav-link" href={% url "login" %}>Login</a>
+            {%endif%}
             </div>
         </div>
     </nav>
 
 
+    {% load crispy_forms_tags %}
     <div class="container">
-        <h1>Login</h1>
+
+        <div class="row">
+            <div class="col-md-12 col-6 md-3">
+                <div class="card m-5">
+                    <div class="card-body">
+                        <h2>Ingrese sus datos</h2>
+                        <form action="#" method="POST">
+                            {% csrf_token %}
+
+                            {{form | crispy }}
+
+                            <a class="btn btn-secondary btn-lg " href={% url "index" %}>Volver al home</a>
+                            <input type="submit" value="Ingresar" class="btn btn-primary btn-lg " style="float:right;">
+
+
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
 
 
 
