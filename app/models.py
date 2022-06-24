@@ -21,7 +21,7 @@ def filepath(request, filename):
     return os.path.join('images/', filename) 
 
 class Mascota(models.Model):
-    id = models.BigAutoField(primary_key=True,verbose_name="Id mascota")
+    id_mascota = models.BigAutoField(primary_key=True,verbose_name="Id mascota")
     nombreMascota = models.CharField(max_length=50,verbose_name="Nombre de la mascota")
     nombreEspecie = models.ForeignKey(Especie,on_delete=models.CASCADE,verbose_name="Especie")
     raza = models.CharField(max_length=50,verbose_name="Raza")
@@ -34,4 +34,15 @@ class Mascota(models.Model):
 
 
 class Cliente(models.Model):
-    id = models.BigAutoField(primary_key=True,verbose_name="Id cliente")
+    id_cliente = models.BigAutoField(primary_key=True,verbose_name="Id cliente")
+
+
+
+
+class CarritoCliente(models.Model):
+    id_carrito = models.BigAutoField(primary_key=True,verbose_name="Id carrito")
+    id_cliente = models.ForeignKey(Mascota,on_delete=models.CASCADE,verbose_name="Mascota")
+    id_mascota = models.ForeignKey(Cliente,on_delete=models.CASCADE,verbose_name="Cliente")
+
+    def __str__(self):
+        return self.id_carrito
