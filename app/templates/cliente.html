@@ -39,7 +39,7 @@
                 <a class="nav-link" href={% url "galeria" %}>Galeria</a>
                 <a class="nav-link " href={% url "equipo" %}>Equipo</a>
                 {%if user.is_authenticated%}
-                <a class="nav-link " href={% url "cliente" %}>Cliente</a>
+                <a class="nav-link active " href={% url "cliente" %}>Cliente</a>
                 {%endif%}
             </div>
             <div class="navbar-nav ml-auto">
