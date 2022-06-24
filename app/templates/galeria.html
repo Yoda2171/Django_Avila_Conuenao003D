@@ -33,13 +33,17 @@
                 <a class="nav-link " href={% url "index" %}>Home <span class="sr-only">(current)</span></a>
                 <a class="nav-link " href={% url "somos" %}>Somos</a>
                 <a class="nav-link active" href={% url "galeria" %}>Galeria</a>
-                <a class="nav-link" href={% url "clientes" %}>Clientes</a>
+                <a class="nav-link " href={% url "equipo" %}>Equipo</a>
+                {%if user.is_authenticated%}
+                <a class="nav-link " href={% url "cliente" %}>Cliente</a>
+                {%endif%}
             </div>
             <div class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
                 <a class="nav-link" href={% url "register" %}>Register</a>
                 <a class="nav-link" href={% url "logout" %}>Logout</a>
                 {%else%}
+        
                 <a class="nav-link" href={% url "login" %}>Login</a>
                 {%endif%}
             </div>
@@ -80,6 +84,7 @@
                             <th scope="col">Foto</th>
                             <th scope="col">Especie</th>
                             <th scope="col">Exdueño</th>
+                            <th scope="col">Precio</th>
                             <th scope="col">Editar</th>
                             <th scope="col">Eliminar</th>
                         </tr>
@@ -91,6 +96,7 @@
                             <td><img src="{{i.imagenMascota.url}}" class="img-fluid" style="width: 25%;"></td>
                             <td>{{i.nombreEspecie}}</td>
                             <td>{{i.nombreDueño}}</td>
+                            <td>{{i.precio}}</td>
                             <td><a href={% url "editarMascota" i.id %}>Editar</a></td>
                             <td>
                                 <form action={% url "eliminarMascota" i.id  %} method="POST">

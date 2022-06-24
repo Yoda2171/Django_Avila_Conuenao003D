@@ -1,6 +1,3 @@
-
-from re import U
-from site import USER_BASE
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 from app.models import Especie, Mascota
@@ -21,11 +18,14 @@ def galeria(request):
         return render(request,'galeria.html')
        
 
-def clientes(request):
-    return render(request,"clientes.html")
+def equipo(request):
+    return render(request,"equipo.html")
 
 def register(request):
-    return render(request,"register.html")
+    if(not request.user.is_authenticated):
+        return redirect('login')
+    else:
+        return render(request,"register.html")
 
 def login(request):
     return render(request,"login.html")
@@ -50,7 +50,7 @@ def añadirMascota(request):
             mascota.nombreMascota=request.POST.get("nombre_Mascota")
             mascota.nombreEspecie=Especie.objects.get(nombreEspecie=request.POST.get("nombre_Especie") )
             mascota.raza=request.POST.get("raza_Mascota")
-            mascota.edad=request.POST.get("edad_mascota")
+            mascota.precio=request.POST.get("precio_mascota")
             mascota.nombreDueño=request.POST.get("nombre_Dueño")
 
             if len(request.FILES)!=0:
@@ -82,7 +82,6 @@ def editarMascota(request,id):
         return redirect('login')
 
     else:
-        
         if request.method == 'POST':
             mascota= Mascota.objects.get(id=id)
             mascota.nombreMascota=request.POST.get("nombre_Mascota")
@@ -92,7 +91,7 @@ def editarMascota(request,id):
             else:
                 pass
             mascota.raza=request.POST.get("raza_Mascota")
-            mascota.edad=request.POST.get("edad_mascota")
+            mascota.precio=request.POST.get("precio_mascota")
             mascota.nombreDueño=request.POST.get("nombre_Dueño")
 
             if len(request.FILES)!=0:
@@ -103,4 +102,8 @@ def editarMascota(request,id):
         
         return render(request,"editMascota.html",data)
    
-
+def cliente(request):
+    if(not request.user.is_authenticated):
+        return redirect('login')
+    else:
+        return render(request,"cliente.html")

@@ -14,8 +14,6 @@ class Especie(models.Model):
         return self.nombreEspecie
 
 
-
-
 def filepath(request, filename):
     old_filename = filename
     timeNow = datetime.datetime.now().strftime('%Y%m%d%H:%M:%S')
@@ -27,7 +25,7 @@ class Mascota(models.Model):
     nombreMascota = models.CharField(max_length=50,verbose_name="Nombre de la mascota")
     nombreEspecie = models.ForeignKey(Especie,on_delete=models.CASCADE,verbose_name="Especie")
     raza = models.CharField(max_length=50,verbose_name="Raza")
-    edad= models.IntegerField(verbose_name="edad")  
+    precio= models.IntegerField(verbose_name="precio")  
     nombreDueño = models.CharField(max_length=50,verbose_name="Nombre del dueño")
     imagenMascota= models.ImageField(upload_to=filepath,verbose_name="imagen de la mascota")
 
