@@ -25,6 +25,7 @@
 </head>
 
 <body>
+    {% load static %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href={% url "index" %}><i class="fas fa-paw p-2"></i>Petes</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
@@ -36,16 +37,19 @@
                 <a class="nav-link " href={% url "index" %}>Home <span class="sr-only">(current)</span></a>
                 <a class="nav-link" href={% url "somos" %}>Somos</a>
                 <a class="nav-link" href={% url "galeria" %}>Galeria</a>
-                <a class="nav-link active" href={% url "clientes" %}>Clientes</a>
+                <a class="nav-link " href={% url "equipo" %}>Equipo</a>
+                {%if user.is_authenticated%}
+                <a class="nav-link active " href={% url "cliente" %}>Cliente</a>
+                {%endif%}
             </div>
             <div class="navbar-nav ml-auto">
                 
-                
                 {% if user.is_authenticated %}
-                    <a class="nav-link" href={% url "register" %}>Register</a>
-                    <a class="nav-link" href={% url "logout" %}>Logout</a>
+                <a class="nav-link" href={% url "register" %}>Register</a>
+                <a class="nav-link" href={% url "logout" %}>Logout</a>
                 {%else%}
-                    <a class="nav-link" href={% url "login" %}>Login</a>
+        
+                <a class="nav-link" href={% url "login" %}>Login</a>
                 {%endif%}
             </div>
         </div>
@@ -60,12 +64,27 @@
                     <tr>
                         <th scope="col">Id</th>
                         <th scope="col">Nombre</th>
-                        <th scope="col">Foto</th>
-                        <th scope="col">Especie</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Editar</th>
+                        <th scope="col">Eliminar</th>
                     </tr>
                 </thead>
                 <tbody>
-
+                    {%for i in cliente%}
+                    <tr>
+                        <td>{{i.id_cliente}}</td>
+                        <td>{{i.nombre}}</td>
+                        <td>{{i.email}}</td>
+                        <td><a href={% url "editarCliente" i.id_cliente %}>Editar</a></td>
+                        <td>
+                            <form action={% url "eliminarCliente" i.id_cliente  %} method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                            </form>
+                        </td>
+            
+                    </tr>
+                    {%endfor%}
 
                 </tbody>
 
@@ -108,40 +127,9 @@
     </footer>
 
 
-<<<<<<< HEAD
-
-=======
-    {% load static %}
->>>>>>> f73fe356beb646e7dd3b1c8e79e238d71b80881e
-
-    <script>
-
-        $(document).ready(function () {
-
-            window.addEventListener('load', function () {
-
-                $.getJSON("https://rickandmortyapi.com/api/character", function (data) {
-                    $.each(data.results, function (i, item) {
-                        $("#clientes").append("<tr><td>" + item.id +
-                            "</td><td>" + item.name +
-                            "</td><td><img src='" + item.image + "'>" +
-                            "</td><td>" + item.species + "</td></tr>");
-
-                    });
 
 
-                });
-
-                // Fetch all the forms we want to apply custom Bootstrap validation styles to
-
-            }, false);
-
-
-
-
-        });
-
-    </script>
+  
 
 
 

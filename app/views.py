@@ -1,9 +1,6 @@
-
-from re import U
-from site import USER_BASE
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
-from app.models import Especie, Mascota
+from app.models import Cliente, Especie, Mascota
 
 
 # Create your views here.
@@ -21,11 +18,14 @@ def galeria(request):
         return render(request,'galeria.html')
        
 
-def clientes(request):
-    return render(request,"clientes.html")
+def equipo(request):
+    return render(request,"equipo.html")
 
 def register(request):
-    return render(request,"register.html")
+    if(not request.user.is_authenticated):
+        return redirect('login')
+    else:
+        return render(request,"register.html")
 
 def login(request):
     return render(request,"login.html")
@@ -50,7 +50,7 @@ def añadirMascota(request):
             mascota.nombreMascota=request.POST.get("nombre_Mascota")
             mascota.nombreEspecie=Especie.objects.get(nombreEspecie=request.POST.get("nombre_Especie") )
             mascota.raza=request.POST.get("raza_Mascota")
-            mascota.edad=request.POST.get("edad_mascota")
+            mascota.precio=request.POST.get("precio_mascota")
             mascota.nombreDueño=request.POST.get("nombre_Dueño")
 
             if len(request.FILES)!=0:
@@ -65,7 +65,7 @@ def eliminarMascota(request,id):
         return redirect('login')
         
     else:
-        mascota= Mascota.objects.get(id=id)
+        mascota= Mascota.objects.get(id_mascota=id)
         mascota.delete()
         return redirect('galeria')
 
@@ -74,7 +74,7 @@ def editarMascota(request,id):
     data = {
         
         "especies" : Especie.objects.all(),
-        "mascota": Mascota.objects.get(id=id),
+        "mascota": Mascota.objects.get(id_mascota=id),
     
     }
 
@@ -82,9 +82,8 @@ def editarMascota(request,id):
         return redirect('login')
 
     else:
-        
         if request.method == 'POST':
-            mascota= Mascota.objects.get(id=id)
+            mascota= Mascota.objects.get(id_mascota=id)
             mascota.nombreMascota=request.POST.get("nombre_Mascota")
 
             if(mascota.nombreEspecie == mascota.nombreEspecie):
@@ -92,7 +91,7 @@ def editarMascota(request,id):
             else:
                 pass
             mascota.raza=request.POST.get("raza_Mascota")
-            mascota.edad=request.POST.get("edad_mascota")
+            mascota.precio=request.POST.get("precio_mascota")
             mascota.nombreDueño=request.POST.get("nombre_Dueño")
 
             if len(request.FILES)!=0:
@@ -103,4 +102,57 @@ def editarMascota(request,id):
         
         return render(request,"editMascota.html",data)
    
+def cliente(request):
+    if(not request.user.is_authenticated):
+        return redirect('login')
+    else:
+        cliente=Cliente.objects.all()
+        return render(request,"cliente.html",{"cliente":cliente})
+
+def añadirCliente(request):
+    if(not request.user.is_authenticated):
+        return redirect('login')
+    else:
+        if request.method == 'POST':
+
+            cliente= Cliente()
+            cliente.nombre=request.POST.get("nombre_cliente")
+            cliente.email=request.POST.get("email_cliente")
+            cliente.direccion=request.POST.get("direccion_cliente")
+            cliente.telefono=request.POST.get("telefono_cliente")
+            cliente.password=request.POST.get("contraseña_cliente")
+        
+            cliente.save()
+            return redirect('cliente')
+            
+
+def eliminarCliente(request,id):
+    if(not request.user.is_authenticated):
+        return redirect('login')
+        
+    else:
+        cliente= Cliente.objects.get(id_cliente=id)
+        cliente.delete()
+        return redirect('cliente')
+
+
+def editarCliente(request,id):
+    cliente= Cliente.objects.get(id_cliente=id)
+    if(not request.user.is_authenticated):
+        return redirect('login')
+    else:
+        if request.method == 'POST':
+            
+            cliente= Cliente.objects.get(id_cliente=id)
+            cliente.nombre=request.POST.get("nombre_cliente")
+            cliente.direccion=request.POST.get("direccion_cliente")
+            cliente.telefono=request.POST.get("telefono_cliente")
+            cliente.email=request.POST.get("email_cliente")
+            cliente.password=request.POST.get("contraseña_cliente")
+            
+            cliente.save()
+
+            return redirect('cliente')
+        return render(request,"editCliente.html",{"cliente":cliente})    
+        
 
