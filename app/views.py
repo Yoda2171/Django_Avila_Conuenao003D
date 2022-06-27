@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
-from app.models import Especie, Mascota
+from app.models import Cliente, Especie, Mascota
 
 
 # Create your views here.
@@ -65,7 +65,7 @@ def eliminarMascota(request,id):
         return redirect('login')
         
     else:
-        mascota= Mascota.objects.get(id=id)
+        mascota= Mascota.objects.get(id_mascota=id)
         mascota.delete()
         return redirect('galeria')
 
@@ -74,7 +74,7 @@ def editarMascota(request,id):
     data = {
         
         "especies" : Especie.objects.all(),
-        "mascota": Mascota.objects.get(id=id),
+        "mascota": Mascota.objects.get(id_mascota=id),
     
     }
 
@@ -83,7 +83,7 @@ def editarMascota(request,id):
 
     else:
         if request.method == 'POST':
-            mascota= Mascota.objects.get(id=id)
+            mascota= Mascota.objects.get(id_mascota=id)
             mascota.nombreMascota=request.POST.get("nombre_Mascota")
 
             if(mascota.nombreEspecie == mascota.nombreEspecie):
@@ -106,4 +106,53 @@ def cliente(request):
     if(not request.user.is_authenticated):
         return redirect('login')
     else:
-        return render(request,"cliente.html")
+        cliente=Cliente.objects.all()
+        return render(request,"cliente.html",{"cliente":cliente})
+
+def añadirCliente(request):
+    if(not request.user.is_authenticated):
+        return redirect('login')
+    else:
+        if request.method == 'POST':
+
+            cliente= Cliente()
+            cliente.nombre=request.POST.get("nombre_cliente")
+            cliente.email=request.POST.get("email_cliente")
+            cliente.direccion=request.POST.get("direccion_cliente")
+            cliente.telefono=request.POST.get("telefono_cliente")
+            cliente.password=request.POST.get("contraseña_cliente")
+        
+            cliente.save()
+            return redirect('cliente')
+            
+
+def eliminarCliente(request,id):
+    if(not request.user.is_authenticated):
+        return redirect('login')
+        
+    else:
+        cliente= Cliente.objects.get(id_cliente=id)
+        cliente.delete()
+        return redirect('cliente')
+
+
+def editarCliente(request,id):
+    cliente= Cliente.objects.get(id_cliente=id)
+    if(not request.user.is_authenticated):
+        return redirect('login')
+    else:
+        if request.method == 'POST':
+            
+            cliente= Cliente.objects.get(id_cliente=id)
+            cliente.nombre=request.POST.get("nombre_cliente")
+            cliente.direccion=request.POST.get("direccion_cliente")
+            cliente.telefono=request.POST.get("telefono_cliente")
+            cliente.email=request.POST.get("email_cliente")
+            cliente.password=request.POST.get("contraseña_cliente")
+            
+            cliente.save()
+
+            return redirect('cliente')
+        return render(request,"editCliente.html",{"cliente":cliente})    
+        
+

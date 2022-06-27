@@ -52,7 +52,7 @@
     <div class="container">
         <div class="card m-5 p-2">
             <div class="card-body">
-                <form class="needs-validation" action={% url 'editarMascota' mascota.id %} method='POST'
+                <form class="needs-validation" action={% url 'editarMascota' mascota.id_mascota %} method='POST'
                     enctype="multipart/form-data" novalidate>
                     {% csrf_token %}
                     <div class="form-row">

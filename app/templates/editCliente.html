@@ -52,20 +52,21 @@
   <div class="container">
     <div class="card m-3 bg-light">
       <div class="card-body">
-        <form class="needs-validation" action={% url "añadirCliente" %} method='POST' novalidate>
+        <form class="needs-validation" action={% url "editarCliente" cliente.id_cliente %} method='POST' novalidate>
           {% csrf_token %}
           <div class="form-row">
             <div class="col-md-6 mb-3">
               <label for="validationCustom01">Nombre</label>
               <input type="text" class="form-control" id="validationCustom01" name="nombre_cliente"
-                onfocus="CambiaColor(this)" required>
+                value="{{cliente.nombre}}" onfocus="CambiaColor(this)" required>
               <div class="valid-feedback">
                 Looks good!
               </div>
             </div>
             <div class="col-md-6 mb-3">
               <label for="validationCustom02">Contraseña</label>
-              <input type="password" class="form-control" id="validationCustom02" name="contraseña_cliente" required>
+              <input type="password" class="form-control" id="validationCustom02" name="contraseña_cliente"
+                value="{{cliente.password}}" required>
               <div class="valid-feedback">
                 Ingrese Contraseña
               </div>
@@ -74,7 +75,8 @@
           <div class="form-row">
             <div class="col-md-6 mb-3">
               <label for="validationCustom03">Direccion</label>
-              <input type="text" class="form-control" name="direccion_cliente" id="validationCustom03" required>
+              <input type="text" class="form-control" name="direccion_cliente" id="validationCustom03"
+                value="{{cliente.direccion}}" required>
               <div class="invalid-feedback">
                 Porfavor ingrese una ciudad validad.
               </div>
@@ -83,8 +85,8 @@
 
             <div class="col-md-3 mb-3">
               <label for="validationCustom05">Telefono</label>
-              <input type="number" class="form-control" name="telefono_cliente" id="validationCustom05" min="0"
-                required>
+              <input type="number" class="form-control" name="telefono_cliente" id="validationCustom05"
+                value="{{cliente.telefono}}" min="0" required>
               <div class="invalid-feedback">
                 Porfavor ingrese un Telefono valido
               </div>
@@ -92,7 +94,7 @@
             <div class="col-md-6 mb-3">
               <label for="exampleInputEmail1">Email</label>
               <input type="email" class="form-control" name="email_cliente" id="exampleInputEmail1"
-                aria-describedby="emailHelp" required>
+                value="{{cliente.email}}" aria-describedby="emailHelp" required>
               <div class="invalid-feedback">
                 Porfavor ingrese un correo valido.
               </div>

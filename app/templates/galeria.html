@@ -97,9 +97,9 @@
                             <td>{{i.nombreEspecie}}</td>
                             <td>{{i.nombreDueño}}</td>
                             <td>{{i.precio}}</td>
-                            <td><a href={% url "editarMascota" i.id %}>Editar</a></td>
+                            <td><a href={% url "editarMascota" i.id_mascota %}>Editar</a></td>
                             <td>
-                                <form action={% url "eliminarMascota" i.id  %} method="POST">
+                                <form action={% url "eliminarMascota" i.id_mascota  %} method="POST">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-danger">Eliminar</button>
                                 </form>
