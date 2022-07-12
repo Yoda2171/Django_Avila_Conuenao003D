@@ -1,3 +1,4 @@
+from ssl import SSLSession
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 from app.models import Cliente, Especie, Mascota
@@ -17,6 +18,14 @@ def galeria(request):
     else:
         return render(request,'galeria.html')
        
+def carrito(request):
+    if(not request.user.is_authenticated):
+        return redirect('login')
+    else:
+        session=request.session.get('carro',{ "mascota": []})
+        mascota=Mascota.objects.filter(id_mascota__in=session["mascota"])
+        data={ "mascota": mascota }
+    return render(request,"carrito.html", data)
 
 def equipo(request):
     return render(request,"equipo.html")
@@ -156,3 +165,35 @@ def editarCliente(request,id):
         return render(request,"editCliente.html",{"cliente":cliente})    
         
 
+
+
+def carro(request,id):
+    if(not request.user.is_authenticated):
+        return redirect('login')
+    else:
+        mascota = Mascota.objects.get(id_mascota=id)
+        initial ={ "mascota": [],"precio":0}
+        session = request.session.get("carro", initial)
+        if id in session["mascota"]:
+            print("ya existe")
+        else:
+            session["mascota"].append(id)
+            session["precio"]=(mascota.precio)
+            request.session["carro"] = session
+            print("agregado")
+            print( session["mascota"])
+        return redirect('carrito')
+
+def carro_eliminar(request,id):
+    if(not request.user.is_authenticated):
+        return redirect('login')
+    else:
+        session = request.session.get("carro", {})
+        session["mascota"].remove(id)
+        request.session["carro"] = session
+        return redirect('carrito')
+
+
+        
+       
+    

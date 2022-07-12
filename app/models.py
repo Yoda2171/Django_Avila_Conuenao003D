@@ -38,7 +38,7 @@ class Mascota(models.Model):
 class Cliente(models.Model):
     id_cliente = models.BigAutoField(primary_key=True,verbose_name="Id cliente")
     nombre = models.CharField(max_length=50,verbose_name="Nombre del cliente")
-    email=models.CharField(max_length=50,verbose_name="correo del cliente")
+    email=models.CharField(max_length=50,verbose_name="correo del cliente",null=True)
     direccion = models.CharField(max_length=50, verbose_name="dirrecion")
     telefono=models.IntegerField(verbose_name="telefono")
     password=models.CharField(max_length=50, verbose_name="contraseña")

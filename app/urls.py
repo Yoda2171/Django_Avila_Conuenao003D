@@ -20,6 +20,9 @@ urlpatterns = [
     path('cliente/new/', views.añadirCliente, name="añadirCliente"),
     path('cliente/<id>/', views.eliminarCliente, name="eliminarCliente"),
     path('cliente/new/<id>', views.editarCliente, name="editarCliente"),
+    path('carrito/', views.carrito, name="carrito"),
+    path('carro/<id>/', views.carro, name="agregarCarrito"),
+    path('carrito/<id>/', views.carro_eliminar, name="eliminarCarrito"),
     path('contacto/', views.contacto,name="contacto"),
     path('accounts/', include('django.contrib.auth.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

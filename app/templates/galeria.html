@@ -40,10 +40,11 @@
             </div>
             <div class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
+                <a class="nav-link" href={% url "carrito" %}><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
                 <a class="nav-link" href={% url "register" %}>Register</a>
                 <a class="nav-link" href={% url "logout" %}>Logout</a>
                 {%else%}
-        
+
                 <a class="nav-link" href={% url "login" %}>Login</a>
                 {%endif%}
             </div>
@@ -68,11 +69,11 @@
 
 
 
-    <div class="container-fluid">
+     
         {% load static %}
 
         {% if mascotas != null %}
-        
+
         {% if user.is_authenticated %}
         <div class="container">
             <div class="table-responsive-sm">
@@ -87,6 +88,7 @@
                             <th scope="col">Precio</th>
                             <th scope="col">Editar</th>
                             <th scope="col">Eliminar</th>
+                            <th scope="col">Agregar al carrito</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -99,9 +101,16 @@
                             <td>{{i.precio}}</td>
                             <td><a href={% url "editarMascota" i.id_mascota %}>Editar</a></td>
                             <td>
-                                <form action={% url "eliminarMascota" i.id_mascota  %} method="POST">
+                                <form action={% url "eliminarMascota" i.id_mascota %} method="POST">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-danger">Eliminar</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action={% url "agregarCarrito" i.id_mascota %} method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="id_mascota" value="{{i.id_mascota}}">
+                                    <button type="submit" class="btn btn-info">Agregar</button>
                                 </form>
                             </td>
 
@@ -111,9 +120,7 @@
                     </tbody>
 
                 </table>
-
             </div>
-
         </div>
         {% endif %}
         {% if not user.is_authenticated %}
@@ -160,12 +167,12 @@
                     class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
             </div>
         </div>
-    </div>
+
         {%endif%}
 
         {% endif %}
         {% if mascotas == null%}
-    
+
         <div class="row">
 
             <div class="col-4">
@@ -209,10 +216,10 @@
                     class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
             </div>
         </div>
-    </div>
+    
     <!-- Galeria -->
     {%endif%}
-    
+
 
     <div class="jumbotron jumbotron-fluid mt-4 text-info">
         <div class="container">

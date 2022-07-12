@@ -8,7 +8,7 @@ from app.models import Cliente
 from .serializers import ClienteSerializer
 # Create your views here.
 @csrf_exempt
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST','DELETE'])
 def lista_cliente(request):
 
     if request.method=='GET':
@@ -23,4 +23,17 @@ def lista_cliente(request):
             return Response(serializer.data, status = status.HTTP_201_CREATED)
         else:
             return Response (serializer.errors, status= status.HTTP_400_BAD_REQUEST)
-            
+@csrf_exempt
+@api_view(['DELETE'])
+def eliminarREST(request,id):
+    if request.method=='DELETE':
+        cliente= Cliente.objects.get(id_cliente=id)
+        serializer =ClienteSerializer(cliente)
+        cliente.delete()
+        return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
+        
+    else:
+        return Response (status=status.HTTP_404_NOT_FOUND)
+
+
+
