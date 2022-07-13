@@ -1,7 +1,6 @@
-from ssl import SSLSession
 from django.shortcuts import redirect, render
-from django.contrib.auth.models import User
-from app.models import Cliente, Especie, Mascota
+from django.contrib.auth.models import User 
+from app.models import Cliente, Especie, Mascota, CarritoCliente
 
 
 # Create your views here.
@@ -22,10 +21,13 @@ def carrito(request):
     if(not request.user.is_authenticated):
         return redirect('login')
     else:
-        session=request.session.get('carro',{ "mascota": []})
-        mascota=Mascota.objects.filter(id_mascota__in=session["mascota"])
-        data={ "mascota": mascota }
-    return render(request,"carrito.html", data)
+        carrito=CarritoCliente.objects.filter(id_user=request.user.id)
+        carro=list(map(lambda x: x.id_mascota, carrito))
+        if (len( carro ) != 0):
+            print(carro)
+            return render(request,"carrito.html",{"carrito":carro})
+        else:
+            return render(request,"carrito.html")
 
 def equipo(request):
     return render(request,"equipo.html")
@@ -130,8 +132,15 @@ def añadirCliente(request):
             cliente.direccion=request.POST.get("direccion_cliente")
             cliente.telefono=request.POST.get("telefono_cliente")
             cliente.password=request.POST.get("contraseña_cliente")
-        
             cliente.save()
+
+            if cliente.password == request.POST.get("contraseña_cliente2"):
+                if User.objects.filter(email=cliente.email).exists():
+                    return render(request,"register.html",{"error":"El correo ya existe"})
+                else:
+                    user = User.objects.create_user(username=cliente.nombre, password=cliente.password,email=cliente.email)
+                    user.save();
+
             return redirect('cliente')
             
 
@@ -168,30 +177,39 @@ def editarCliente(request,id):
 
 
 def carro(request,id):
+    
     if(not request.user.is_authenticated):
         return redirect('login')
     else:
         mascota = Mascota.objects.get(id_mascota=id)
-        initial ={ "mascota": [],"precio":0}
-        session = request.session.get("carro", initial)
-        if id in session["mascota"]:
-            print("ya existe")
+        carrito=CarritoCliente.objects.filter(id_user=request.user.id)
+        carro=list(map(lambda x: x.id_mascota, carrito))
+
+        if mascota in carro:
+            print("ya esta en el carrito")
+            return redirect('galeria') 
         else:
-            session["mascota"].append(id)
-            session["precio"]=(mascota.precio)
-            request.session["carro"] = session
+            carrito=CarritoCliente()
+            carrito.id_user=User.objects.get(id=request.user.id)
+            carrito.id_mascota=mascota
+            carrito.save()
+            
             print("agregado")
-            print( session["mascota"])
-        return redirect('carrito')
+            return redirect('galeria') 
 
 def carro_eliminar(request,id):
     if(not request.user.is_authenticated):
         return redirect('login')
     else:
-        session = request.session.get("carro", {})
-        session["mascota"].remove(id)
-        request.session["carro"] = session
+        carrito=CarritoCliente.objects.get(id_user=request.user.id,id_mascota=id)
+        carrito.delete()
+        
+
         return redirect('carrito')
+
+
+
+
 
 
         

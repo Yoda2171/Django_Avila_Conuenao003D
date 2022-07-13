@@ -64,7 +64,7 @@
                             {% csrf_token %}
 
                             {{form | crispy }}
-
+                            
                             <a class="btn btn-secondary btn-lg " href={% url "index" %}>Volver al home</a>
                             <input type="submit" value="Ingresar" class="btn btn-primary btn-lg " style="float:right;">
 
