@@ -33,10 +33,8 @@ def equipo(request):
     return render(request,"equipo.html")
 
 def register(request):
-    if(not request.user.is_authenticated):
-        return redirect('login')
-    else:
-        return render(request,"register.html")
+    
+    return render(request,"register.html")
 
 def login(request):
     return render(request,"login.html")
@@ -49,26 +47,32 @@ def mascotas(request):
     if(not request.user.is_authenticated):
        return redirect('login')
     else:
-        return render(request, "mascota.html", {"especie": especie})
+        if(request.user.is_superuser == True):
+            return render(request, "mascota.html", {"especie": especie})
+        else:
+            return redirect('index')
 
 def añadirMascota(request):
     if(not request.user.is_authenticated):
         return redirect('login')
     else:
-        if request.method == 'POST':
+        if(request.user.is_superuser == True):
+            if request.method == 'POST':
 
-            mascota= Mascota()
-            mascota.nombreMascota=request.POST.get("nombre_Mascota")
-            mascota.nombreEspecie=Especie.objects.get(nombreEspecie=request.POST.get("nombre_Especie") )
-            mascota.raza=request.POST.get("raza_Mascota")
-            mascota.precio=request.POST.get("precio_mascota")
-            mascota.nombreDueño=request.POST.get("nombre_Dueño")
+                mascota= Mascota()
+                mascota.nombreMascota=request.POST.get("nombre_Mascota")
+                mascota.nombreEspecie=Especie.objects.get(nombreEspecie=request.POST.get("nombre_Especie") )
+                mascota.raza=request.POST.get("raza_Mascota")
+                mascota.precio=request.POST.get("precio_mascota")
+                mascota.nombreDueño=request.POST.get("nombre_Dueño")
 
-            if len(request.FILES)!=0:
-                mascota.imagenMascota=request.FILES["imagen_mascota"]
+                if len(request.FILES)!=0:
+                    mascota.imagenMascota=request.FILES["imagen_mascota"]
 
-            mascota.save()
-            return redirect('galeria')
+                mascota.save()
+                return redirect('galeria')
+        else:
+            return redirect('index')
             
 
 def eliminarMascota(request,id):
@@ -76,9 +80,12 @@ def eliminarMascota(request,id):
         return redirect('login')
         
     else:
-        mascota= Mascota.objects.get(id_mascota=id)
-        mascota.delete()
-        return redirect('galeria')
+        if(request.user.is_superuser == True):
+            mascota= Mascota.objects.get(id_mascota=id)
+            mascota.delete()
+            return redirect('galeria')
+        else:
+            return redirect('index')
 
 
 def editarMascota(request,id):
@@ -93,37 +100,41 @@ def editarMascota(request,id):
         return redirect('login')
 
     else:
-        if request.method == 'POST':
-            mascota= Mascota.objects.get(id_mascota=id)
-            mascota.nombreMascota=request.POST.get("nombre_Mascota")
+        if(request.user.is_superuser == True):
+            if request.method == 'POST':
+                mascota= Mascota.objects.get(id_mascota=id)
+                mascota.nombreMascota=request.POST.get("nombre_Mascota")
 
-            if(mascota.nombreEspecie == mascota.nombreEspecie):
-                mascota.nombreEspecie= Especie.objects.get(nombreEspecie=request.POST.get("nombre_Especie") )
-            else:
-                pass
-            mascota.raza=request.POST.get("raza_Mascota")
-            mascota.precio=request.POST.get("precio_mascota")
-            mascota.nombreDueño=request.POST.get("nombre_Dueño")
+                if(mascota.nombreEspecie == mascota.nombreEspecie):
+                    mascota.nombreEspecie= Especie.objects.get(nombreEspecie=request.POST.get("nombre_Especie") )
+                else:
+                    pass
+                mascota.raza=request.POST.get("raza_Mascota")
+                mascota.precio=request.POST.get("precio_mascota")
+                mascota.nombreDueño=request.POST.get("nombre_Dueño")
 
-            if len(request.FILES)!=0:
-                mascota.imagenMascota=request.FILES["imagen_mascota"]
-                
-            mascota.save()
-            return redirect('galeria')
-        
-        return render(request,"editMascota.html",data)
+                if len(request.FILES)!=0:
+                    mascota.imagenMascota=request.FILES["imagen_mascota"]
+                    
+                mascota.save()
+                return redirect('galeria')
+            
+            return render(request,"editMascota.html",data)
+        else:
+            return redirect('index')
    
 def cliente(request):
     if(not request.user.is_authenticated):
         return redirect('login')
     else:
-        cliente=Cliente.objects.all()
-        return render(request,"cliente.html",{"cliente":cliente})
+        if(request.user.is_superuser == True):
+            cliente=Cliente.objects.all()
+            return render(request,"cliente.html",{"cliente":cliente})
+        else:
+            return redirect('index')
 
 def añadirCliente(request):
-    if(not request.user.is_authenticated):
-        return redirect('login')
-    else:
+
         if request.method == 'POST':
 
             cliente= Cliente()
@@ -145,13 +156,17 @@ def añadirCliente(request):
             
 
 def eliminarCliente(request,id):
+    
     if(not request.user.is_authenticated):
         return redirect('login')
         
     else:
-        cliente= Cliente.objects.get(id_cliente=id)
-        cliente.delete()
-        return redirect('cliente')
+        if(request.user.is_superuser == True):
+            cliente= Cliente.objects.get(id_cliente=id)
+            cliente.delete()
+            return redirect('cliente')
+        else:
+            return redirect('index')
 
 
 def editarCliente(request,id):
@@ -159,31 +174,33 @@ def editarCliente(request,id):
     if(not request.user.is_authenticated):
         return redirect('login')
     else:
-        if request.method == 'POST':
-            
-            cliente= Cliente.objects.get(id_cliente=id)
-            cliente.nombre=request.POST.get("nombre_cliente")
-            cliente.direccion=request.POST.get("direccion_cliente")
-            cliente.telefono=request.POST.get("telefono_cliente")
-            cliente.email=request.POST.get("email_cliente")
-            cliente.password=request.POST.get("contraseña_cliente")
-            
-            cliente.save()
+        if(request.user.is_superuser == True):
+            if request.method == 'POST':
+                
+                cliente= Cliente.objects.get(id_cliente=id)
+                cliente.nombre=request.POST.get("nombre_cliente")
+                cliente.direccion=request.POST.get("direccion_cliente")
+                cliente.telefono=request.POST.get("telefono_cliente")
+                cliente.email=request.POST.get("email_cliente")
+                cliente.password=request.POST.get("contraseña_cliente")
+                
+                cliente.save()
 
-            return redirect('cliente')
-        return render(request,"editCliente.html",{"cliente":cliente})    
-        
+                return redirect('cliente')
+            return render(request,"editCliente.html",{"cliente":cliente})    
+        else:
+            return redirect('index')
 
 
 
 def carro(request,id):
-    
     if(not request.user.is_authenticated):
         return redirect('login')
     else:
         mascota = Mascota.objects.get(id_mascota=id)
         carrito=CarritoCliente.objects.filter(id_user=request.user.id)
         carro=list(map(lambda x: x.id_mascota, carrito))
+
 
         if mascota in carro:
             print("ya esta en el carrito")

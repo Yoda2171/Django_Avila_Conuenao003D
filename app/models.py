@@ -60,6 +60,7 @@ class CarritoCliente(models.Model):
     id_carrito = models.BigAutoField(primary_key=True,verbose_name="Id carrito")
     id_user = models.ForeignKey(User,verbose_name="Cliente",on_delete=models.SET_NULL, null=True)
     id_mascota = models.ForeignKey(Mascota,on_delete=models.CASCADE,verbose_name="Mascota")
+    
 
     
     def serializer(self):
@@ -68,4 +69,3 @@ class CarritoCliente(models.Model):
             "id_user":self.id_user,
             "id_mascota":self.id_mascota,
         }
-
