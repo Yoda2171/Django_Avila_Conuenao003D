@@ -34,11 +34,19 @@
                 <a class="nav-link " href={% url "index" %}>Home <span class="sr-only">(current)</span></a>
                 <a class="nav-link" href={% url "somos" %}>Somos</a>
                 <a class="nav-link" href={% url "galeria" %}>Galeria</a>
-                <a class="nav-link" href={% url "clientes" %}>Clientes</a>
+                <a class="nav-link " href={% url "equipo" %}>Equipo</a>
+                {%if user.is_authenticated%}
+                <a class="nav-link " href={% url "cliente" %}>Cliente</a>
+                {%endif%}
             </div>
             <div class="navbar-nav ml-auto">
-                <a class="nav-link " href={% url "register" %}>Register</a>
+                {% if user.is_authenticated %}
+                <a class="nav-link" href={% url "register" %}>Register</a>
+                <a class="nav-link" href={% url "logout" %}>Logout</a>
+                {%else%}
+        
                 <a class="nav-link active" href={% url "login" %}>Login</a>
+                {%endif%}
             </div>
         </div>
     </nav>
@@ -56,7 +64,7 @@
                             {% csrf_token %}
 
                             {{form | crispy }}
-
+                            
                             <a class="btn btn-secondary btn-lg " href={% url "index" %}>Volver al home</a>
                             <input type="submit" value="Ingresar" class="btn btn-primary btn-lg " style="float:right;">
 

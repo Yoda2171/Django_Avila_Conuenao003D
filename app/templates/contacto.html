@@ -25,7 +25,7 @@
 <body>
 
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="index.html"><i class="fas fa-paw p-2"></i>Petes</a>
+    <a class="navbar-brand" href={% url "index" %}><i class="fas fa-paw p-2"></i>Petes</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
       aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -35,11 +35,20 @@
         <a class="nav-link " href={% url "index" %}>Home <span class="sr-only">(current)</span></a>
         <a class="nav-link" href={% url "somos" %}>Somos</a>
         <a class="nav-link" href={% url "galeria" %}>Galeria</a>
-        <a class="nav-link" href={% url "clientes" %}>Clientes</a>
+        <a class="nav-link " href={% url "equipo" %}>Equipo</a>
+        {%if user.is_authenticated%}
+        <a class="nav-link " href={% url "cliente" %}>Cliente</a>
+        {%endif%}
       </div>
       <div class="navbar-nav ml-auto">
-        <a class="nav-link " href={% url "register" %}>Register</a>
+        {% if user.is_authenticated %}
+        <a class="nav-link" href={% url "carrito" %}><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
+        <a class="nav-link" href={% url "register" %}>Register</a>
+        <a class="nav-link" href={% url "logout" %}>Logout</a>
+        {%else%}
+        
         <a class="nav-link" href={% url "login" %}>Login</a>
+        {%endif%}
       </div>
     </div>
   </nav>
@@ -48,23 +57,23 @@
   <div class="container">
     <div class="card m-3 bg-light">
       <div class="card-body">
-        <form >
+        <form class='needs-validation' novalidate>
           <div class="form-row">
             <div class="col-md-6 mb-3">
               <div class="form-group">
-              <label for="exampleInputEmail1">Email</label>
-              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+                <label for="exampleInputEmail1">Email</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
               </div>
             </div>
             <div class="col-md-6 mb-3">
               <label for="validationCustom02">Asunto</label>
-              <input type="text" class="form-control" name="asunto" id="validationCustom02" >
+              <input type="text" class="form-control" name="asunto" id="validationCustom02" required>
             </div>
           </div>
           <div class="form-group">
             <label for="exampleFormControlTextarea1">Mensaje:</label>
-            <textarea name="mensaje" class="form-control"  name="mensaje" id="exampleFormControlTextarea1" rows="3"
-              onKeyPress="contarPalabras(this.form); if (event.keycode1 == 13) form.mensaje.value +=' ';"></textarea>
+            <textarea name="mensaje" class="form-control" name="mensaje" id="exampleFormControlTextarea1" rows="3"
+              onKeyPress="contarPalabras(this.form); if (event.keycode1 == 13) form.mensaje.value +=' ';" required></textarea>
 
             <label for="cantidad" class="mt-3">Cantidad de palabras:</label>
             <input type="text" class="form-control col-1" name="cantidad" id="cantidad" value="0" disabled>
@@ -114,6 +123,30 @@
       texto = texto.split(" ")
       form.cantidad.value = texto.length
     }
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (
+
+      function () {
+        'use strict';
+
+        window.addEventListener('load', function () {
+          // Fetch all the forms we want to apply custom Bootstrap validation styles to
+          let forms = document.getElementsByClassName('needs-validation');
+
+
+
+          // Loop over them and prevent submission
+          let validation = Array.prototype.filter.call(forms, function (form) {
+            form.addEventListener('submit', function (event) {
+              if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+              form.classList.add('was-validated');
+            }, false);
+          });
+        }, false);
+      })();
   </script>
 
 

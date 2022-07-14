@@ -23,7 +23,7 @@
 <body>
     
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="index.html"><i class="fas fa-paw p-2"></i>Petes</a>
+        <a class="navbar-brand" href={% url "index" %}><i class="fas fa-paw p-2"></i>Petes</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -33,11 +33,19 @@
                 <a class="nav-link active" href={% url "index" %}>Home <span class="sr-only">(current)</span></a>
                 <a class="nav-link" href={% url "somos" %}>Somos</a>
                 <a class="nav-link" href={% url "galeria" %}>Galeria</a>
-                <a class="nav-link" href={% url "clientes" %}>Clientes</a>
+                <a class="nav-link " href={% url "equipo" %}>Equipo</a>
+                {%if user.is_authenticated%}
+                <a class="nav-link " href={% url "cliente" %}>Cliente</a>
+                {%endif%}
             </div>
             <div class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                <a class="nav-link" href={% url "carrito" %}><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
                 <a class="nav-link" href={% url "register" %}>Register</a>
+                <a class="nav-link" href={% url "logout" %}>Logout</a>
+                {%else%}
                 <a class="nav-link" href={% url "login" %}>Login</a>
+                {%endif%}
 
             </div>
         </div>
