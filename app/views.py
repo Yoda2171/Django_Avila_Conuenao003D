@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User 
-from app.models import Cliente, Especie, Mascota, CarritoCliente,CompraRealizada
+from app.models import Cliente, Especie, Mascota, CarritoCliente
 
 
 # Create your views here.
@@ -27,10 +27,14 @@ def carrito(request):
 
             else:
                 carrito=CarritoCliente.objects.filter(id_user=request.user.id)
-                carro=list(map(lambda x: x.id_mascota, carrito))
-
-                if (len( carro ) != 0):
-                    return render(request,"carrito.html",{"carrito":carro})
+                datos={
+                    "carrito":list(map(lambda x: x.id_mascota, carrito)),
+                    "carro":list(map(lambda x: x, carrito))
+                }
+                
+                
+                if (len( datos["carrito"] ) != 0):
+                    return render(request,"carrito.html",datos)
                 else:
                     return render(request,"carrito.html")
 
@@ -223,12 +227,14 @@ def carro_eliminar(request,id):
     if(not request.user.is_authenticated):
         return redirect('login')
     else:
-        
-        carrito=CarritoCliente.objects.get(id_user=request.user.id,id_mascota=id)
-        carrito.delete()
-        
+        if(request.user.is_superuser == True):
+            carrito=CarritoCliente.objects.get(id_user=request.user.id,id_mascota=id)
+            carrito.delete()
+            
 
-        return redirect('carrito')
+            return redirect('carrito')
+        else:
+            return redirect('index')
 
 
         
@@ -236,12 +242,55 @@ def lista_carrito(request,id):
     if(not request.user.is_authenticated):
         return redirect('login')
     else:
-        carrito=CarritoCliente.objects.filter(id_user=id)
-        carro=list(map(lambda x: x.id_mascota, carrito))
+        if(request.user.is_superuser == True):
+            carrito=CarritoCliente.objects.filter(id_user=id)
+            
+            
+            datos={
+                "carrito":list(map(lambda x: x.id_mascota, carrito)),
+                "carro":list(map(lambda x: x, carrito))
+            }
+            
 
-        if (len( carro ) != 0):
-                return render(request,"listaCarrito.html",{"carrito":carro})
+            if (len( datos["carrito"] ) != 0):
+                    return render(request,"listaCarrito.html", datos)
+            else:
+                return render(request,"carrito.html")
         else:
-            return render(request,"carrito.html")
-      
+            return redirect('index')
     
+def seguimiento(request,id,slug):
+    if(not request.user.is_authenticated):
+        return redirect('login')
+    else:
+        if(request.user.is_superuser == True):
+
+            carrito=CarritoCliente.objects.filter(id_user=id,id_mascota=slug)
+           
+            if request.POST.get("select_seguimiento") == "En camino":
+                carrito.update(seguimiento="En camino")
+                return redirect('carrito')
+
+            elif request.POST.get("select_seguimiento") == "Entregado":
+                carrito.update(seguimiento="Entregado")
+                return redirect('carrito')
+
+            elif request.POST.get("select_seguimiento") == "Preparacion":
+                carrito.update(seguimiento="Preparacion")
+                return redirect('carrito')
+        
+        
+           
+        else:
+            return redirect('index')
+
+def elimarcarrouser(request,id,slug):
+    if(not request.user.is_authenticated):
+        return redirect('login')
+    else:
+        if(request.user.is_superuser == True):
+            carrito=CarritoCliente.objects.get(id_user=id,id_mascota=slug)
+            carrito.delete()
+            return redirect('carrito')
+        else:
+            return redirect('index')

@@ -32,6 +32,7 @@ class Mascota(models.Model):
     precio= models.IntegerField(verbose_name="precio")  
     nombreDueño = models.CharField(max_length=50,verbose_name="Nombre del dueño")
     imagenMascota= models.ImageField(upload_to=filepath,verbose_name="imagen de la mascota")
+    
 
     def serializer(self):
         return {
@@ -66,25 +67,9 @@ class CarritoCliente(models.Model):
     id_carrito = models.BigAutoField(primary_key=True,verbose_name="Id carrito")
     id_user = models.ForeignKey(User,verbose_name="Cliente",on_delete=models.SET_NULL, null=True)
     id_mascota = models.ForeignKey(Mascota,on_delete=models.CASCADE,verbose_name="Mascota")
+    seguimiento = models.CharField(default="Preparacion",verbose_name="Seguimiento" ,max_length=50,null=True)
     
-    def serializer(self):
-        return {
-            "id_carrito":self.id_carrito,
-            "id_user":self.id_user,
-            "id_mascota":self.id_mascota,
-        }
 
+    def __str__(self):
+        return self.id_user.id
 
-class CompraRealizada(models.Model):
-    id_compra = models.BigAutoField(primary_key=True,verbose_name="Id compra")
-    id_carrito = models.ForeignKey(CarritoCliente,on_delete=models.CASCADE,verbose_name="Carrito")
-    id_user = models.ForeignKey(User,verbose_name="Cliente",on_delete=models.SET_NULL, null=True)
-    seguimiento = models.BooleanField(default=False,verbose_name="Seguimiento")
-
-    def serializer(self):
-        return {
-            "id_compra":self.id_compra,
-            "id_carrito":self.id_carrito,
-            "id_user":self.id_user,
-            "seguimiento":self.seguimiento,
-        }

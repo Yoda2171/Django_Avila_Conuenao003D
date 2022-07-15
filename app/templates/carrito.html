@@ -44,7 +44,8 @@
             </div>
             <div class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
-                <a class="nav-link active" href={% url "carrito" %}><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
+                <a class="nav-link active" href={% url "carrito" %}><i class="fa fa-shopping-cart"
+                        aria-hidden="true"></i></a>
                 {% if user.is_superuser%}
                 <a class="nav-link" href={% url "register" %}>Register</a>
                 {% endif %}
@@ -67,18 +68,34 @@
                         <th scope="col">Foto</th>
                         <th scope="col">Especie</th>
                         <th scope="col">Precio</th>
+                        <th scope="col">Seguimiento De La Compra</th>
                         <th scope="col">Eliminar</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {%for i in carrito%}
+                    {%for i in carro %}
                     <tr>
-                        <td>{{i.nombreMascota}}</td>
-                        <td><img src="{{i.imagenMascota.url}}" class="img-fluid" style="width: 25%;"></td>
-                        <td>{{i.nombreEspecie}}</td>
-                        <td>{{i.precio}}</td>
+                        <td>{{i.id_mascota.nombreMascota}}</td>
+                        <td><img src="{{i.id_mascota.imagenMascota.url}}" class="img-fluid" style="width: 25%;"></td>
+                        <td>{{i.id_mascota.nombreEspecie}}</td>
+                        <td>{{i.id_mascota.precio}}</td>
+
                         <td>
-                            <form action={% url "eliminarCarrito" i.id_mascota %} method="POST">
+                            <select class="form-control" disabled>
+
+                                {% if i.seguimiento == "Preparacion"%}
+                                <option selected>Preparacion</option>
+                                {%elif i.seguimiento == "En camino" %}
+                                <option selected>En camino</option>
+                                {%elif i.seguimiento == "Entregado" %}
+                                <option selected>Entregado</option>
+                                {%endif%}
+
+                            </select>
+                        </td>
+
+                        <td>
+                            <form action={% url "eliminarCarrito" i.id_mascota.id_mascota %} method="POST">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger">Eliminar</button>
                             </form>
@@ -93,7 +110,7 @@
 
     {% if user.is_superuser%}
     <div class="container">
-        
+
 
         <div class="container">
             <div class="table-responsive-sm">
@@ -104,7 +121,7 @@
                             <th scope="col">Nombre</th>
                             <th scope="col">Email</th>
                             <th scope="col">Ver compras</th>
-                            
+
                         </tr>
                     </thead>
                     <tbody>
@@ -114,16 +131,16 @@
                             <td>{{i.username}}</td>
                             <td>{{i.email}}</td>
                             <td><a href={% url "lista_carrito" i.id %}>Ver Compras</a></td>
-    
+
                         </tr>
                         {%endfor%}
-    
+
                     </tbody>
-    
+
                 </table>
-    
+
             </div>
-    
+
         </div>
     </div>
     {% endif%}
