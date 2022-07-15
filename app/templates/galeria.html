@@ -34,16 +34,19 @@
                 <a class="nav-link " href={% url "somos" %}>Somos</a>
                 <a class="nav-link active" href={% url "galeria" %}>Galeria</a>
                 <a class="nav-link " href={% url "equipo" %}>Equipo</a>
-                {%if user.is_authenticated%}
+                {%if user.is_authenticated and  user.is_superuser%}
                 <a class="nav-link " href={% url "cliente" %}>Cliente</a>
                 {%endif%}
             </div>
             <div class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
+                <a class="nav-link" href={% url "carrito" %}><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
+                {% if user.is_superuser%}
                 <a class="nav-link" href={% url "register" %}>Register</a>
+                {% endif %}
                 <a class="nav-link" href={% url "logout" %}>Logout</a>
                 {%else%}
-        
+                <a class="nav-link" href={% url "register" %}>Register</a>
                 <a class="nav-link" href={% url "login" %}>Login</a>
                 {%endif%}
             </div>
@@ -57,7 +60,7 @@
             <p class="lead">Actualmente tenemos en adopción a muchas mascotas. Todas son tranquilas y muy obedientes,
                 esperando a que
                 su próximo amo les dé mucho amor y cariño</p>
-            {% if user.is_authenticated %}
+            {% if user.is_authenticated and user.is_superuser %}
             <a href={% url "mascota" %}><button type="button" class="btn btn-info btn-lg btn-block">Añadir
                     Mascota</button></a>
             {% endif %}
@@ -68,151 +71,145 @@
 
 
 
-    <div class="container-fluid">
-        {% load static %}
 
-        {% if mascotas != null %}
-        
-        {% if user.is_authenticated %}
-        <div class="container">
-            <div class="table-responsive-sm">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
+    {% load static %}
 
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Foto</th>
-                            <th scope="col">Especie</th>
-                            <th scope="col">Exdueño</th>
-                            <th scope="col">Precio</th>
-                            <th scope="col">Editar</th>
-                            <th scope="col">Eliminar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {%for i in mascotas%}
-                        <tr>
-                            <td>{{i.nombreMascota}}</td>
-                            <td><img src="{{i.imagenMascota.url}}" class="img-fluid" style="width: 25%;"></td>
-                            <td>{{i.nombreEspecie}}</td>
-                            <td>{{i.nombreDueño}}</td>
-                            <td>{{i.precio}}</td>
-                            <td><a href={% url "editarMascota" i.id_mascota %}>Editar</a></td>
-                            <td>
-                                <form action={% url "eliminarMascota" i.id_mascota  %} method="POST">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-danger">Eliminar</button>
-                                </form>
-                            </td>
+    {% if mascotas != null %}
 
-                        </tr>
-                        {%endfor%}
+    {% if user.is_authenticated %}
+    <div class="container">
+        <div class="table-responsive-sm">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
 
-                    </tbody>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Foto</th>
+                        <th scope="col">Especie</th>
+                        <th scope="col">Exdueño</th>
+                        <th scope="col">Precio</th>
+                        {% if user.is_superuser %}
+                        <th scope="col">Editar</th>
+                        <th scope="col">Eliminar</th>
+                        {% endif %}
+                        <th scope="col">Agregar al carrito</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for i in mascotas%}
+                    <tr>
+                        <td>{{i.nombreMascota}}</td>
+                        <td><img src="{{i.imagenMascota.url}}" class="img-fluid" style="width: 25%;"></td>
+                        <td>{{i.nombreEspecie}}</td>
+                        <td>{{i.nombreDueño}}</td>
+                        <td>{{i.precio}}</td>
+                        {% if user.is_superuser %}
+                        <td><a href={% url "editarMascota" i.id_mascota %}>Editar</a></td>
+                        <td>
+                            <form action={% url "eliminarMascota" i.id_mascota %} method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                            </form>
+                        </td>
+                        {% endif %}
+                        <td>
+                            <form action={% url "agregarCarrito" i.id_mascota %} method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="id_mascota" value="{{i.id_mascota}}">
+                                <button type="submit" class="btn btn-info">Agregar</button>
+                            </form>
+                        </td>
 
-                </table>
+                    </tr>
+                    {%endfor%}
 
-            </div>
+                </tbody>
 
-        </div>
-        {% endif %}
-        {% if not user.is_authenticated %}
-        <div class="row">
-
-            <div class="col-4">
-                <img src="{% static 'images/conejo 1.jpg' %}"
-                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
-            </div>
-            <div class="col-4">
-                <img src="{% static 'images/conejo 2.jpg' %}"
-                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
-            </div>
-            <div class="col-4">
-                <img src="{% static 'images/conejo 3.jpg' %}"
-                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-4">
-                <img src="{% static 'images/perro 2.jpg' %}"
-                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
-            </div>
-            <div class="col-4">
-                <img src="{% static 'images/perro3.jpg' %}"
-                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
-            </div>
-            <div class="col-4">
-                <img src="{% static 'images/conjunto-perros-1000x700.jpg' %}"
-                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-4">
-                <img src="{% static 'images/gato 2.png' %}"
-                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
-            </div>
-            <div class="col-4">
-                <img src="{% static 'images/gato 5.jpg' %}"
-                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
-            </div>
-            <div class="col-4">
-                <img src="{% static 'images/gato 4.jpg' %}"
-                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
-            </div>
+            </table>
         </div>
     </div>
-        {%endif%}
+    {% endif %}
+    {% if not user.is_authenticated %}
+    <div class="row">
 
-        {% endif %}
-        {% if mascotas == null%}
-    
-        <div class="row">
-
-            <div class="col-4">
-                <img src="{% static 'images/conejo 1.jpg' %}"
-                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
-            </div>
-            <div class="col-4">
-                <img src="{% static 'images/conejo 2.jpg' %}"
-                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
-            </div>
-            <div class="col-4">
-                <img src="{% static 'images/conejo 3.jpg' %}"
-                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
-            </div>
+        <div class="col-4">
+            <img src="{% static 'images/conejo 1.jpg' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
         </div>
-        <div class="row">
-            <div class="col-4">
-                <img src="{% static 'images/perro 2.jpg' %}"
-                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
-            </div>
-            <div class="col-4">
-                <img src="{% static 'images/perro3.jpg' %}"
-                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
-            </div>
-            <div class="col-4">
-                <img src="{% static 'images/conjunto-perros-1000x700.jpg' %}"
-                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
-            </div>
+        <div class="col-4">
+            <img src="{% static 'images/conejo 2.jpg' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
         </div>
-        <div class="row">
-            <div class="col-4">
-                <img src="{% static 'images/gato 2.png' %}"
-                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
-            </div>
-            <div class="col-4">
-                <img src="{% static 'images/gato 5.jpg' %}"
-                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
-            </div>
-            <div class="col-4">
-                <img src="{% static 'images/gato 4.jpg' %}"
-                    class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
-            </div>
+        <div class="col-4">
+            <img src="{% static 'images/conejo 3.jpg' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
         </div>
     </div>
+    <div class="row">
+        <div class="col-4">
+            <img src="{% static 'images/perro 2.jpg' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+        </div>
+        <div class="col-4">
+            <img src="{% static 'images/perro3.jpg' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+        </div>
+        <div class="col-4">
+            <img src="{% static 'images/conjunto-perros-1000x700.jpg' %}"
+                class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <img src="{% static 'images/gato 2.png' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+        </div>
+        <div class="col-4">
+            <img src="{% static 'images/gato 5.jpg' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+        </div>
+        <div class="col-4">
+            <img src="{% static 'images/gato 4.jpg' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+        </div>
+    </div>
+
+    {%endif%}
+
+    {% endif %}
+    {% if mascotas == null%}
+
+    <div class="row">
+
+        <div class="col-4">
+            <img src="{% static 'images/conejo 1.jpg' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+        </div>
+        <div class="col-4">
+            <img src="{% static 'images/conejo 2.jpg' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+        </div>
+        <div class="col-4">
+            <img src="{% static 'images/conejo 3.jpg' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <img src="{% static 'images/perro 2.jpg' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+        </div>
+        <div class="col-4">
+            <img src="{% static 'images/perro3.jpg' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+        </div>
+        <div class="col-4">
+            <img src="{% static 'images/conjunto-perros-1000x700.jpg' %}"
+                class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <img src="{% static 'images/gato 2.png' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+        </div>
+        <div class="col-4">
+            <img src="{% static 'images/gato 5.jpg' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+        </div>
+        <div class="col-4">
+            <img src="{% static 'images/gato 4.jpg' %}" class="img-fluid p-0 m-0 rounded-0 img-thumbnail w-100 h-100">
+        </div>
+    </div>
+
     <!-- Galeria -->
     {%endif%}
-    
+
 
     <div class="jumbotron jumbotron-fluid mt-4 text-info">
         <div class="container">
@@ -220,7 +217,7 @@
             <p class="lead">Actualmente tenemos en adopción a muchas mascotas. Todas son tranquilas y muy obedientes,
                 esperando a que
                 su próximo amo les dé mucho amor y cariño</p>
-            {% if user.is_authenticated %}
+            {% if user.is_authenticated and user.is_superuser%}
             <a href={% url "mascota" %}><button type="button" class="btn btn-info btn-lg btn-block">Añadir
                     Mascota</button></a>
             {% endif %}

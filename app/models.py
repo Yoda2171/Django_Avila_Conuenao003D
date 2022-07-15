@@ -1,5 +1,7 @@
 
 from django.db import models
+from django.contrib.auth.models import User
+
 import datetime
 import os
 
@@ -30,27 +32,44 @@ class Mascota(models.Model):
     precio= models.IntegerField(verbose_name="precio")  
     nombreDueño = models.CharField(max_length=50,verbose_name="Nombre del dueño")
     imagenMascota= models.ImageField(upload_to=filepath,verbose_name="imagen de la mascota")
+    
 
-    def __str__(self):
-        return self.nombreMascota
+    def serializer(self):
+        return {
+            "nombreMascota":self.nombreMascota,
+            "nombreEspecie" :self.nombreEspecie, 
+            "raza":self.raza,
+            "precio":self.precio,
+            "nombreDueño":self.nombreDueño,
+            "imagenMascota":self.imagenMascota
+        }
 
 
 class Cliente(models.Model):
     id_cliente = models.BigAutoField(primary_key=True,verbose_name="Id cliente")
     nombre = models.CharField(max_length=50,verbose_name="Nombre del cliente")
-    email=models.CharField(max_length=50,verbose_name="correo del cliente")
+    email=models.CharField(max_length=50,verbose_name="correo del cliente",null=True)
     direccion = models.CharField(max_length=50, verbose_name="dirrecion")
     telefono=models.IntegerField(verbose_name="telefono")
     password=models.CharField(max_length=50, verbose_name="contraseña")
     
-    def __str__(self):
-        return self.nombre
+    def serializer(self):
+        return {
+            "nombre":self.nombre,
+            "email":self.email,
+            "direccion":self.direccion,
+            "telefono":self.telefono,
+            "password":self.password
+        }
 
 
 class CarritoCliente(models.Model):
     id_carrito = models.BigAutoField(primary_key=True,verbose_name="Id carrito")
-    id_cliente = models.ForeignKey(Mascota,on_delete=models.CASCADE,verbose_name="Mascota")
-    id_mascota = models.ForeignKey(Cliente,on_delete=models.CASCADE,verbose_name="Cliente")
+    id_user = models.ForeignKey(User,verbose_name="Cliente",on_delete=models.SET_NULL, null=True)
+    id_mascota = models.ForeignKey(Mascota,on_delete=models.CASCADE,verbose_name="Mascota")
+    seguimiento = models.CharField(default="Preparacion",verbose_name="Seguimiento" ,max_length=50,null=True)
+    
 
     def __str__(self):
-        return self.id_carrito
+        return self.id_user.id
+
