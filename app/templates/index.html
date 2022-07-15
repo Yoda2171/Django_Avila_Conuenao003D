@@ -34,7 +34,7 @@
                 <a class="nav-link" href={% url "somos" %}>Somos</a>
                 <a class="nav-link" href={% url "galeria" %}>Galeria</a>
                 <a class="nav-link " href={% url "equipo" %}>Equipo</a>
-                {%if user.is_authenticated and user.is_superuser%}
+                {%if user.is_authenticated and  user.is_superuser%}
                 <a class="nav-link " href={% url "cliente" %}>Cliente</a>
                 {%endif%}
             </div>

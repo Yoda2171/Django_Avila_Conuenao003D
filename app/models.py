@@ -52,8 +52,14 @@ class Cliente(models.Model):
     telefono=models.IntegerField(verbose_name="telefono")
     password=models.CharField(max_length=50, verbose_name="contraseña")
     
-    def __str__(self):
-        return self.nombre
+    def serializer(self):
+        return {
+            "nombre":self.nombre,
+            "email":self.email,
+            "direccion":self.direccion,
+            "telefono":self.telefono,
+            "password":self.password
+        }
 
 
 class CarritoCliente(models.Model):
@@ -61,11 +67,24 @@ class CarritoCliente(models.Model):
     id_user = models.ForeignKey(User,verbose_name="Cliente",on_delete=models.SET_NULL, null=True)
     id_mascota = models.ForeignKey(Mascota,on_delete=models.CASCADE,verbose_name="Mascota")
     
-
-    
     def serializer(self):
         return {
             "id_carrito":self.id_carrito,
             "id_user":self.id_user,
             "id_mascota":self.id_mascota,
+        }
+
+
+class CompraRealizada(models.Model):
+    id_compra = models.BigAutoField(primary_key=True,verbose_name="Id compra")
+    id_carrito = models.ForeignKey(CarritoCliente,on_delete=models.CASCADE,verbose_name="Carrito")
+    id_user = models.ForeignKey(User,verbose_name="Cliente",on_delete=models.SET_NULL, null=True)
+    seguimiento = models.BooleanField(default=False,verbose_name="Seguimiento")
+
+    def serializer(self):
+        return {
+            "id_compra":self.id_compra,
+            "id_carrito":self.id_carrito,
+            "id_user":self.id_user,
+            "seguimiento":self.seguimiento,
         }

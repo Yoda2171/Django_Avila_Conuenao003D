@@ -44,7 +44,7 @@
             </div>
             <div class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
-                <a class="nav-link" href={% url "carrito" %}><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
+                <a class="nav-link active" href={% url "carrito" %}><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
                 {% if user.is_superuser%}
                 <a class="nav-link" href={% url "register" %}>Register</a>
                 {% endif %}
@@ -55,10 +55,9 @@
                 {%endif%}
             </div>
         </div>
-
     </nav>
 
-
+    {% if not user.is_superuser%}
     <div class="container">
         <div class="table-responsive-sm">
             <table class="table table-bordered" id="carrito">
@@ -86,14 +85,48 @@
                         </td>
                     </tr>
                     {%endfor%}
-
                 </tbody>
-
             </table>
-
         </div>
-
     </div>
+    {%endif%}
+
+    {% if user.is_superuser%}
+    <div class="container">
+        
+
+        <div class="container">
+            <div class="table-responsive-sm">
+                <table class="table table-bordered" id="clientes">
+                    <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Ver compras</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%for i in clientes%}
+                        <tr>
+                            <td>{{i.id}}</td>
+                            <td>{{i.username}}</td>
+                            <td>{{i.email}}</td>
+                            <td><a href={% url "lista_carrito" i.id %}>Ver Compras</a></td>
+    
+                        </tr>
+                        {%endfor%}
+    
+                    </tbody>
+    
+                </table>
+    
+            </div>
+    
+        </div>
+    </div>
+    {% endif%}
 
 
     <footer class="footer-07">

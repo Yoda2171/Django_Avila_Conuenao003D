@@ -23,6 +23,7 @@ urlpatterns = [
     path('carrito/', views.carrito, name="carrito"),
     path('carro/<id>/', views.carro, name="agregarCarrito"),
     path('carrito/<id>/', views.carro_eliminar, name="eliminarCarrito"),
+    path('lista_carrito/<id>/', views.lista_carrito, name="lista_carrito"),
     path('contacto/', views.contacto,name="contacto"),
     path('accounts/', include('django.contrib.auth.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

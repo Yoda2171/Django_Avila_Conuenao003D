@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User 
-from app.models import Cliente, Especie, Mascota, CarritoCliente
+from app.models import Cliente, Especie, Mascota, CarritoCliente,CompraRealizada
 
 
 # Create your views here.
@@ -21,13 +21,19 @@ def carrito(request):
     if(not request.user.is_authenticated):
         return redirect('login')
     else:
-        carrito=CarritoCliente.objects.filter(id_user=request.user.id)
-        carro=list(map(lambda x: x.id_mascota, carrito))
-        if (len( carro ) != 0):
-            print(carro)
-            return render(request,"carrito.html",{"carrito":carro})
-        else:
-            return render(request,"carrito.html")
+            if (request.user.is_superuser):
+                user = User.objects.all()
+                return render(request,"carrito.html",{"clientes":user})
+
+            else:
+                carrito=CarritoCliente.objects.filter(id_user=request.user.id)
+                carro=list(map(lambda x: x.id_mascota, carrito))
+
+                if (len( carro ) != 0):
+                    return render(request,"carrito.html",{"carrito":carro})
+                else:
+                    return render(request,"carrito.html")
+
 
 def equipo(request):
     return render(request,"equipo.html")
@@ -159,7 +165,6 @@ def eliminarCliente(request,id):
     
     if(not request.user.is_authenticated):
         return redirect('login')
-        
     else:
         if(request.user.is_superuser == True):
             cliente= Cliente.objects.get(id_cliente=id)
@@ -218,6 +223,7 @@ def carro_eliminar(request,id):
     if(not request.user.is_authenticated):
         return redirect('login')
     else:
+        
         carrito=CarritoCliente.objects.get(id_user=request.user.id,id_mascota=id)
         carrito.delete()
         
@@ -225,10 +231,17 @@ def carro_eliminar(request,id):
         return redirect('carrito')
 
 
-
-
-
-
         
-       
+def lista_carrito(request,id):
+    if(not request.user.is_authenticated):
+        return redirect('login')
+    else:
+        carrito=CarritoCliente.objects.filter(id_user=id)
+        carro=list(map(lambda x: x.id_mascota, carrito))
+
+        if (len( carro ) != 0):
+                return render(request,"listaCarrito.html",{"carrito":carro})
+        else:
+            return render(request,"carrito.html")
+      
     
